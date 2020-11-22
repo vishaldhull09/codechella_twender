@@ -1,0 +1,665 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Compare</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+	
+          <script type="text/javascript" src="https://d3js.org/d3.v2.min.js"></script>
+
+
+ 
+
+    <style>
+    body {
+     margin:0;
+     padding:0;
+     background-color: #2A2A37;
+    }
+
+    #power-gauge g.arc {
+    fill: steelblue;
+  }
+
+  #power-gauge g.pointer {
+    fill: #e85116;
+    stroke: #b64011;
+  }
+  
+  #power-gauge g.label text {
+    text-anchor: middle;
+    font-size: 14px;
+    font-weight: bold;
+    fill: white;
+  }
+   #power-gauge2 g.arc {
+    fill: steelblue;
+  }
+
+  #power-gauge2 g.pointer {
+    fill: #e85116;
+    stroke: #b64011;
+  }
+  
+  #power-gauge2 g.label text {
+    text-anchor: middle;
+    font-size: 14px;
+    font-weight: bold;
+    fill: white;
+  }
+    .block_type1{
+      height:40%;
+      background-color: #2A2A37;
+      
+      text-align: center;
+     
+    }
+	.row{
+		border: grey 1px dashed;
+		margin: 0px !important;
+	}
+
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    </style>
+</head>
+<body>
+
+	<div class='row' style='background-color: black;margin-left: 20px;'>
+
+        <h4 style="color: #ffffff;text-align: center; font-weight: bold"> <span id="header"></span></h4>
+	</div>
+
+
+	<div style="height:90%;">
+        <div class="col-sm-4 block_type1" style="height: 100%">
+            <canvas id="data_representation1" width="250%" height="150%" style="margin-bottom: 50px;margin-top: 10px;"></canvas>
+            <canvas id="data_representation2" width="250%" height="150%"></canvas>
+        </div>
+        <div class="col-sm-5 block_type1"  style="height: 100%">
+            <canvas id="data_representation3" width="800px" height=550px></canvas>
+        </div>
+        <div class="col-sm-3 block_type1"  style="height: 100%">
+            <h3 style='color:white' > <b><span id="gauge-head"></span></b></h1>
+             <div id="power-gauge" ></div>
+
+             <h3 style='color:white' ><b> <span id="gauge-head2"></span></b></h1>
+
+             <div id="power-gauge2"style=''></div>
+
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript" language="JavaScript">
+    //console.log(final_data)
+
+    var str_data = '{{ final_data | tojson | safe }}' ;
+    var json_data = JSON.parse(str_data) ;
+    
+    console.log(str_data)
+
+    var original = '{{ original }}';
+    
+    console.log(original);
+    console.log(original.length);
+    
+    var temp = localStorage.getItem(original);
+    console.log(temp);
+
+    temp = JSON.parse(temp);
+    
+    console.log(temp);
+    json_data1 = temp;
+    console.log(json_data1);
+
+
+    /*if(json_data1 == null){
+        window.location = "error.html";
+    }*/
+
+    console.log(json_data1['name'])
+    document.getElementById('header').innerHTML =   json_data1['name'] + ' vs ' + json_data['data2']['name'];
+
+    var data1_pos = json_data1['total_pos'];
+    var data1_neu = json_data1['total_neu'];
+    var data1_neg = json_data1['total_neg'];
+    var total1 = data1_pos + data1_neg + data1_neu;
+    var pieData1 = {
+      labels: [
+        "Positive",
+        "Neutral",
+        "Negative"
+    ],
+    datasets: [
+        {
+            data: [((data1_pos / total1)*100), ((data1_neu / total1)*100), ((data1_neg / total1)*100)],
+            backgroundColor: [
+                "#FF8153",
+                "#4ACAB4",
+                "#878BB6"
+            ]
+        }]
+    };
+
+    var options1 = {
+        responsive: true,
+        title: {
+            display: true,
+            position: "top",
+            text: '#' + json_data1['name'],
+            fontSize: 18,
+            fontColor: "#ffffff"
+        },
+        legend: {
+            display: true,
+            position : 'left',
+            labels: {
+                fontColor: 'rgb(255, 255, 255)'
+            }
+        }
+    };
+
+    var data_representation1= document.getElementById("data_representation1").getContext("2d");
+    new Chart(data_representation1, {
+    type: 'doughnut',
+    data: pieData1,
+    options: options1
+    });
+
+    var data2_pos = json_data['data2']['total_pos'];
+    var data2_neu = json_data['data2']['total_neu'];
+    var data2_neg = json_data['data2']['total_neg'];
+    var total2 = data1_pos + data1_neg + data1_neu;
+
+    var pieData2 = {
+      labels: [
+        "Positive",
+        "Neutral",
+        "Negative"
+    ],
+    datasets: [
+        {
+            data: [((data2_pos / total2)*100), ((data2_neu / total2)*100), ((data2_neg / total2)*100)],
+            backgroundColor: [
+                "#FF8153",
+                "#4ACAB4",
+                "#878BB6"
+            ]
+        }]
+    };
+
+    var options2 = {
+        responsive: true,
+        title: {
+            display: true,
+            position: "top",
+            text: '#' + json_data['data2']['name'],
+            fontSize: 18,
+            fontColor: "#ffffff"
+        },
+        legend: {
+            display: true,
+            position : 'left',
+            labels: {
+                fontColor: 'rgb(255, 255, 255)'
+            }
+        }
+    };
+
+    var data_representation2= document.getElementById("data_representation2").getContext("2d");
+    new Chart(data_representation2, {
+    type: 'doughnut',
+    data: pieData2,
+    options: options2
+    });
+
+    new Chart(document.getElementById("data_representation3"), {
+    type: 'line',
+    data: {
+    labels: json_data1['dates'],
+    datasets: [{
+        data: json_data1['pos_line_data'],
+        label: json_data1['name'] + " Positive",
+        borderColor: "#FF8153",
+        fill: false,
+	   fontColor: 'rgb(255, 255, 255)'
+      }, {
+        data: json_data1['neg_line_data'],
+        label: json_data1['name'] + " Negatives",
+        borderColor: "#4ACAB4",
+        fill: false,
+	      color:'white'
+      },
+      {
+        data: json_data['data2']['pos_line_data'],
+        label: json_data['data2']['name'] + " Positive",
+        borderColor: "#c86cff",
+        fill: false,
+	      color:'white'
+      },
+        {
+        data: json_data['data2']['neg_line_data'],
+        label: json_data['data2']['name'] + " Negative",
+        borderColor: "#7ea9b6",
+        fill: false,
+		color:'white'
+      }
+    ]
+  },
+  options: {
+        responsive: false ,
+    title: {
+      display: true,
+      text: 'Sentimental Analysis',
+	   fontColor: 'rgb(255, 255, 255)'
+    }
+  }
+});
+
+    </script>
+    <script>
+var gauge = function(container, configuration) {
+  var that = {};
+  var config = {
+    size            : 400,
+    clipWidth         : 200,
+    clipHeight          : 110,
+    ringInset         : 20,
+    ringWidth         : 20,
+    
+    pointerWidth        : 10,
+    pointerTailLength     : 5,
+    pointerHeadLengthPercent  : 0.9,
+    
+    minValue          : 0,
+    maxValue          : 9,
+    
+    minAngle          : -180,
+    maxAngle          : 180,
+    
+    transitionMs        : 750,
+    
+    majorTicks          : 9,
+    labelFormat         : d3.format(',g'),
+    labelInset          : 9,
+    
+    arcColorFn          : d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
+  };
+  var range = undefined;
+  var r = undefined;
+  var pointerHeadLength = undefined;
+  var value = 0;
+  
+  var svg = undefined;
+  var arc = undefined;
+  var scale = undefined;
+  var ticks = undefined;
+  var tickData = undefined;
+  var pointer = undefined;
+
+  var donut = d3.layout.pie();
+  
+  function deg2rad(deg) {
+    return deg * Math.PI / 180;
+  }
+  
+  function newAngle(d) {
+    var ratio = scale(d);
+    var newAngle = config.minAngle + (ratio * range);
+    return newAngle;
+  }
+  
+  function configure(configuration) {
+    var prop = undefined;
+    for ( prop in configuration ) {
+      config[prop] = configuration[prop];
+    }
+    
+    range = config.maxAngle - config.minAngle;
+    r = config.size / 2;
+    pointerHeadLength = Math.round(r * config.pointerHeadLengthPercent);
+
+    // a linear scale that maps domain values to a percent from 0..1
+    scale = d3.scale.linear()
+      .range([0,1])
+      .domain([config.minValue, config.maxValue]);
+      
+    ticks = scale.ticks(config.majorTicks);
+    tickData = d3.range(config.majorTicks).map(function() {return 1/config.majorTicks;});
+    console.log(ticks);
+    console.log("sefef");
+
+    arc = d3.svg.arc()
+      .innerRadius(r - config.ringWidth - config.ringInset)
+      .outerRadius(r - config.ringInset)
+      .startAngle(function(d, i) {
+        var ratio = d * i;
+        return deg2rad(config.minAngle + (ratio * range));
+      })
+      .endAngle(function(d, i) {
+        var ratio = d * (i+1);
+        return deg2rad(config.minAngle + (ratio * range));
+      });
+  }
+  that.configure = configure;
+  
+  function centerTranslation() {
+    return 'translate('+r +','+ r +')';
+  }
+  
+  function isRendered() {
+    return (svg !== undefined);
+  }
+  that.isRendered = isRendered;
+  
+  function render(newValue) {
+    svg = d3.select(container)
+      .append('svg:svg')
+        .attr('class', 'gauge')
+        .attr('width', config.clipWidth)
+        .attr('height', config.clipHeight);
+    
+    var centerTx = centerTranslation();
+    
+    var arcs = svg.append('g')
+        .attr('class', 'arc')
+        .attr('transform', centerTx);
+    
+    arcs.selectAll('path')
+        .data(tickData)
+      .enter().append('path')
+        .attr('fill', function(d, i) {
+          return config.arcColorFn(d * i);
+        })
+        .attr('d', arc);
+    
+    var lg = svg.append('g')
+        .attr('class', 'label')
+        .attr('transform', centerTx);
+    lg.selectAll('text')
+        .data(ticks)
+      .enter().append('text')
+        .attr('transform', function(d) {
+          var ratio = scale(d);
+          var newAngle = config.minAngle + (ratio * range);
+          return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
+        })
+        .text(config.labelFormat);
+
+    var lineData = [ [config.pointerWidth / 2, 0], 
+            [0, -pointerHeadLength],
+            [-(config.pointerWidth / 2), 0],
+            [0, config.pointerTailLength],
+            [config.pointerWidth / 2, 0] ];
+    var pointerLine = d3.svg.line().interpolate('monotone');
+    var pg = svg.append('g').data([lineData])
+        .attr('class', 'pointer')
+        .attr('transform', centerTx);
+        
+    pointer = pg.append('path')
+      .attr('d', pointerLine/*function(d) { return pointerLine(d) +'Z';}*/ )
+      .attr('transform', 'rotate(' +config.minAngle +')');
+      
+    update(newValue === undefined ? 0 : newValue);
+  }
+  that.render = render;
+  
+  function update(newValue, newConfiguration) {
+    if ( newConfiguration  !== undefined) {
+      configure(newConfiguration);
+    }
+    var ratio = scale(newValue);
+    var newAngle = config.minAngle + (ratio * range);
+    pointer.transition()
+      .duration(config.transitionMs)
+      .ease('elastic')
+      .attr('transform', 'rotate(' +newAngle +')');
+  }
+  that.update = update;
+
+  configure(configuration);
+  
+  return that;
+};
+</script>
+
+<script>
+function onDocumentReady() {
+    document.getElementById('gauge-head').innerHTML =   '#'+json_data1['name'] ;
+     document.getElementById('gauge-head2').innerHTML =  '#' + json_data['data2']['name'] ;
+  var powerGauge = gauge('#power-gauge', {
+    size: 300,
+    clipWidth: 300,
+    clipHeight: 300,
+    ringWidth: 60,
+    maxValue: 10,
+    transitionMs: 4000,
+  });
+  powerGauge.render();
+  
+  function updateReadings() {
+    // just pump in random data here...
+    var gauge_data = (json_data1['avg_pos']*100).toFixed(2);
+    gauge_data = gauge_data/10;
+    console.log(gauge_data);
+    powerGauge.update(gauge_data);
+  }
+  
+  // every few seconds update reading values
+  updateReadings();
+
+var powerGauge2 = gauge2('#power-gauge2', {
+    size: 300,
+    clipWidth: 300,
+    clipHeight: 300,
+    ringWidth: 60,
+    maxValue: 10,
+    transitionMs: 4000,
+  });
+  powerGauge2.render();
+  
+  function updateReadings2() {
+    // just pump in random data here...
+    var gauge_data = (json_data['data2']['avg_pos']*100).toFixed(2);
+    gauge_data = gauge_data/10;
+    console.log(gauge_data);
+    powerGauge2.update(gauge_data);
+  }
+  
+  // every few seconds update reading values
+  updateReadings2();
+
+
+  
+}
+
+if ( !window.isLoaded ) {
+  window.addEventListener("load", function() {
+    onDocumentReady();
+  }, false);
+} else {
+  onDocumentReady();
+}
+</script>
+
+    <script>
+var gauge2= function(container, configuration) {
+  var that = {};
+  var config = {
+    size            : 400,
+    clipWidth         : 200,
+    clipHeight          : 110,
+    ringInset         : 20,
+    ringWidth         : 20,
+    
+    pointerWidth        : 10,
+    pointerTailLength     : 5,
+    pointerHeadLengthPercent  : 0.9,
+    
+    minValue          : 0,
+    maxValue          : 9,
+    
+    minAngle          : -180,
+    maxAngle          : 180,
+    
+    transitionMs        : 750,
+    
+    majorTicks          : 9,
+    labelFormat         : d3.format(',g'),
+    labelInset          : 9,
+    
+    arcColorFn          : d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
+  };
+  var range = undefined;
+  var r = undefined;
+  var pointerHeadLength = undefined;
+  var value = 0;
+  
+  var svg = undefined;
+  var arc = undefined;
+  var scale = undefined;
+  var ticks = undefined;
+  var tickData = undefined;
+  var pointer = undefined;
+
+  var donut = d3.layout.pie();
+  
+  function deg2rad(deg) {
+    return deg * Math.PI / 180;
+  }
+  
+  function newAngle(d) {
+    var ratio = scale(d);
+    var newAngle = config.minAngle + (ratio * range);
+    return newAngle;
+  }
+  
+  function configure(configuration) {
+    var prop = undefined;
+    for ( prop in configuration ) {
+      config[prop] = configuration[prop];
+    }
+    
+    range = config.maxAngle - config.minAngle;
+    r = config.size / 2;
+    pointerHeadLength = Math.round(r * config.pointerHeadLengthPercent);
+
+    // a linear scale that maps domain values to a percent from 0..1
+    scale = d3.scale.linear()
+      .range([0,1])
+      .domain([config.minValue, config.maxValue]);
+      
+    ticks = scale.ticks(config.majorTicks);
+    tickData = d3.range(config.majorTicks).map(function() {return 1/config.majorTicks;});
+    console.log(ticks);
+    console.log("sefef");
+
+    arc = d3.svg.arc()
+      .innerRadius(r - config.ringWidth - config.ringInset)
+      .outerRadius(r - config.ringInset)
+      .startAngle(function(d, i) {
+        var ratio = d * i;
+        return deg2rad(config.minAngle + (ratio * range));
+      })
+      .endAngle(function(d, i) {
+        var ratio = d * (i+1);
+        return deg2rad(config.minAngle + (ratio * range));
+      });
+  }
+  that.configure = configure;
+  
+  function centerTranslation() {
+    return 'translate('+r +','+ r +')';
+  }
+  
+  function isRendered() {
+    return (svg !== undefined);
+  }
+  that.isRendered = isRendered;
+  
+  function render(newValue) {
+    svg = d3.select(container)
+      .append('svg:svg')
+        .attr('class', 'gauge')
+        .attr('width', config.clipWidth)
+        .attr('height', config.clipHeight);
+    
+    var centerTx = centerTranslation();
+    
+    var arcs = svg.append('g')
+        .attr('class', 'arc')
+        .attr('transform', centerTx);
+    
+    arcs.selectAll('path')
+        .data(tickData)
+      .enter().append('path')
+        .attr('fill', function(d, i) {
+          return config.arcColorFn(d * i);
+        })
+        .attr('d', arc);
+    
+    var lg = svg.append('g')
+        .attr('class', 'label')
+        .attr('transform', centerTx);
+    lg.selectAll('text')
+        .data(ticks)
+      .enter().append('text')
+        .attr('transform', function(d) {
+          var ratio = scale(d);
+          var newAngle = config.minAngle + (ratio * range);
+          return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
+        })
+        .text(config.labelFormat);
+
+    var lineData = [ [config.pointerWidth / 2, 0], 
+            [0, -pointerHeadLength],
+            [-(config.pointerWidth / 2), 0],
+            [0, config.pointerTailLength],
+            [config.pointerWidth / 2, 0] ];
+    var pointerLine = d3.svg.line().interpolate('monotone');
+    var pg = svg.append('g').data([lineData])
+        .attr('class', 'pointer')
+        .attr('transform', centerTx);
+        
+    pointer = pg.append('path')
+      .attr('d', pointerLine/*function(d) { return pointerLine(d) +'Z';}*/ )
+      .attr('transform', 'rotate(' +config.minAngle +')');
+      
+    update(newValue === undefined ? 0 : newValue);
+  }
+  that.render = render;
+  
+  function update(newValue, newConfiguration) {
+    if ( newConfiguration  !== undefined) {
+      configure(newConfiguration);
+    }
+    var ratio = scale(newValue);
+    var newAngle = config.minAngle + (ratio * range);
+    pointer.transition()
+      .duration(config.transitionMs)
+      .ease('elastic')
+      .attr('transform', 'rotate(' +newAngle +')');
+  }
+  that.update = update;
+
+  configure(configuration);
+  
+  return that;
+};
+</script>
+
+<
+
+</body>
