@@ -9,3 +9,5 @@ This is a public repository for Twitter organised Codechella hackathon project s
 Twender app collects large numbers feeds from twitter based on searched topic, analyzes them, and classifies them into different polarities (positive,negative,neutral). It also provides the user with detailed reports of what’s trending with the popularity meter. Other than that there is also a functionality to compare two things based on what’s trending.<br>
 Just type in anything trending like Amazon or trump etc...</h4>
 
+<p> Youtube link : https://www.youtube.com/watch?v=JVzSeHlCTf0&feature=youtu.be </p>
+
