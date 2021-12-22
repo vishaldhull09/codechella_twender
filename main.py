@@ -102,6 +102,9 @@ def compare_page():
     comp_data = request.args.get('comp_data')
     original = request.args.get('query')
 
+    print("Comparison view")
+    print(btn,comp_data,original)
+
     if len(comp_data.strip()) > 1:
         query = comp_data
     else:

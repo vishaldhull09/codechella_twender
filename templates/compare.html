@@ -273,7 +273,7 @@
 var gauge = function(container, configuration) {
   var that = {};
   var config = {
-    size            : 400,
+    size            : 300,
     clipWidth         : 200,
     clipHeight          : 110,
     ringInset         : 20,
@@ -440,7 +440,7 @@ function onDocumentReady() {
     document.getElementById('gauge-head').innerHTML =   '#'+json_data1['name'] ;
      document.getElementById('gauge-head2').innerHTML =  '#' + json_data['data2']['name'] ;
   var powerGauge = gauge('#power-gauge', {
-    size: 300,
+    size: 250,
     clipWidth: 300,
     clipHeight: 300,
     ringWidth: 60,
@@ -461,7 +461,7 @@ function onDocumentReady() {
   updateReadings();
 
 var powerGauge2 = gauge2('#power-gauge2', {
-    size: 300,
+    size: 250,
     clipWidth: 300,
     clipHeight: 300,
     ringWidth: 60,

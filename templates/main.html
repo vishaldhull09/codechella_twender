@@ -18,7 +18,7 @@
     body {
      margin:0;
      padding:0;
-    background-color: #2A2A37;
+    background-color: rgb(220, 228, 220);
     color: #fff;
     }
 
@@ -63,17 +63,38 @@
         color: white !important;
     }
 
+    #tweets {
+        width: 40%;
+        height: 80%;
+        background-color: white;
+        margin-right: 2%;
+        margin-left: 2%;
+        margin-top: 3%;
+        border-radius: 5px;
+        box-shadow: -10px 10px 10px gray;
+    }
+
+    .tweet{
+      border-radius: 10px;
+      border: 1px solid rgb(224, 224, 224) !important;
+      margin:1%;
+      box-shadow: 5px 5px 5px rgb(207, 207, 207);
+    }
 
     #block_type1{
       padding-left: 1em;
       color: #000;
-      background-color: #2A2A37;
+      background-color: #ffffff;
       border-radius: 5px;
       text-align: center;
+      margin-bottom: 2%;
+      margin-right: 20px;
+      border-radius: 5px;
+      box-shadow: -10px 10px 10px gray;
     }
     #block_type2{
 
-      background-color: #2A2A37;
+      background-color: #ffffff;
       border-radius: 5px;
       text-align: center;
       
@@ -123,7 +144,7 @@
 
     }
   .links{
-    color: crimson !important;
+    
   }
     </style>
 
@@ -282,7 +303,7 @@ form {
 
 			#block_type1{
 				margin: 3em 1em;
-				width: 95%;
+				width: 60%;
 				color: #000;
 				padding-top: 1em;
 			}
@@ -365,6 +386,8 @@ form {
 				width: 100%;
 			}
 
+      
+
 			
 		}
 
@@ -374,9 +397,9 @@ form {
 </head>
 <body>
 <div id="loader" style="display: none"></div>
- 
+
 <!--NAVBAR-->
- <nav class="navbar navbar-inverse"style="height:3.3em">
+<nav class="navbar navbar-inverse"style="height:3.3em">
   <div class="container-fluid">
     <div class="navbar-header navbar-center">
       <a class="navbar-brand" href="#"style="font-size:1.35em;color: white;text-align: center;margin-left:0; padding-left: 0;" id="capture"><b>What twitter thinks about - {{ data['name'] }}</b></a>
@@ -391,26 +414,28 @@ form {
     </div>
   </div>
 </nav>
+
+
 <!--navbar end-->
  <div class="row">
        
-    <div class="col-sm-6 container-fluid" id="block_type1">
+    <div class="col-sm-12 container-fluid" id="tweets">
         <div class="w3-bar">
-          <button id="btn_all" class="w3-bar-item w3-button w3-teal" style="width:33.3%" onclick="showAllTweet();">All</button>
-          <button id="btn_pos" class="w3-bar-item w3-button w3-black" style="width:33.3%" onclick="showPosTweet();">Positive</button>
-          <button id="btn_neg" class="w3-bar-item w3-button w3-black" style="width:33.3%" onclick="showNegTweet();">Negative</button>
+          <button id="btn_all" class="w3-bar-item w3-button w3-teal" style="width:33.3%" onclick="showAllTweet();"><p style="font-family: monospace;font-size:medium">All</p></button>
+          <button id="btn_pos" class="w3-bar-item w3-button w3-black" style="width:33.3%" onclick="showPosTweet();"><p style="font-family: monospace;">Positive</p></button>
+          <button id="btn_neg" class="w3-bar-item w3-button w3-black" style="width:33.3%" onclick="showNegTweet();"><p style="font-family: monospace;">Negative</p></button>
         </div>
 
 
-            <div id="all_tweets_list" class="tweets_list"style="height:70%">
+            <div id="all_tweets_list" class="tweets_list"style="height:90%">
                 {% for item_out in data['tweets']|reverse %}
                     {% for item_in in item_out|reverse %}
-                    <div class="row"  style="border: grey 1px dashed">
+                    <div class="row tweet"  style="border: grey 1px dashed;background-color: white;">
                         <div class="col-sm-2">
-                            <i class="fa fa-twitter" aria-hidden="true"  style="font-size:3.2em;color:blue"></i>
+                            <i class="fa fa-twitter" aria-hidden="true"  style="font-size:40px;color:rgb(0, 174, 255)"></i>
                         </div>
                         <div class="col-sm-10" style="text-align: left; word-wrap: break-word;">
-                            <span style="color: crimson;font-weight:bold;font-size: large" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
+                            <span style="color: rgb(2, 0, 0);font-weight: bold;font-family: Arial, Helvetica, sans-serif;font-size: medium;" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
                             <span style="color: #464a4c;margin-left: 10px; color: grey;" id="tweet_created_on" class="tweet_created_on">{{ item_in['date'] }}</span>
                             <p style="color: #464a4c;margin-left: 10px;" id="tweet_text">{{ item_in['text'] }}</p>
 
@@ -420,16 +445,16 @@ form {
                 {% endfor %}
             </div>
 
-            <div id="pos_tweets_list" class="tweets_list" style="display: none;">
+            <div id="pos_tweets_list" class="tweets_list" style="display: none;height: 100%">
                 {% for item_out in data['tweets']|reverse %}
                     {% for item_in in item_out|reverse %}
                     {% if item_in['inference'] == 'Positive' %}
-                    <div class="row">
+                    <div class="row tweet" style="background-color: white;">
                         <div class="col-sm-2">
-                            <i class="fa fa-twitter" aria-hidden="true"  style="font-size:48px;color:blue"></i>
+                            <i class="fa fa-twitter" aria-hidden="true"  style="font-size:40px;color:rgb(0, 174, 255)"></i>
                         </div>
                         <div class="col-sm-10" style="text-align: left; word-wrap: break-word;">
-                            <span style="color: crimson;font-weight:bold;font-size: large" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
+                            <span style="color: rgb(2, 0, 0);font-weight: bold;font-family: Arial, Helvetica, sans-serif;font-size: medium;" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
                             <span style="color: #464a4c;margin-left: 10px; color: grey;" id="tweet_created_on" class="tweet_created_on">{{ item_in['date'] }}</span>
                             <p style="color: #464a4c;margin-left: 10px;" id="tweet_text">{{ item_in['text'] }}</p>
 
@@ -440,16 +465,16 @@ form {
                 {% endfor %}
             </div>
 
-            <div id="neg_tweets_list" class="tweets_list" style="display: none;">
+            <div id="neg_tweets_list" class="tweets_list" style="display: none;height: 100%;">
                 {% for item_out in data['tweets']|reverse %}
                     {% for item_in in item_out|reverse %}
                 {% if item_in['inference'] == 'Negative' %}
-                    <div class="row">
+                    <div class="row tweet" style="background-color: white;">
                         <div class="col-sm-2">
-                             <i class="fa fa-twitter" aria-hidden="true"  style="font-size:48px;color:blue"></i>
+                             <i class="fa fa-twitter" aria-hidden="true"  style="font-size:40px;color:rgb(0, 174, 255)"></i>
                         </div>
                         <div class="col-sm-10" style="text-align: left; word-wrap: break-word;">
-                            <span style="color: crimson;font-weight:bold;font-size: large" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
+                            <span style="color: rgb(2, 0, 0);font-weight: bold;font-family: Arial, Helvetica, sans-serif;font-size: medium;" id="tweet_created_by"><a class='links' href="{{ item_in['link'] }}">{{ item_in['username'] }} </a> </span>
                             <span style="color: #464a4c;margin-left: 10px; color: grey;" id="tweet_created_on" class="tweet_created_on">{{ item_in['date'] }}</span>
                             <p style="color: #464a4c;margin-left: 10px;" id="tweet_text">{{ item_in['text'] }}</p>
 
@@ -463,9 +488,9 @@ form {
 
         </div>
 
-<div class="col-sm-6" id="block_type1" >
+<div class="col-sm-6" id="block_type1" style="margin-top: 1%;">
 
-            <h2 style='color: white;font-family: sans-serif; font-size: 1.5em'><b>Compare with ...</b></h2>
+            <h2 style='color: rgb(68, 68, 68);font-family: monospace; font-size: 1.5em'><b>Compare with ...</b></h2>
             <div class="row" style='color: #fff; padding-top: 0.7em; padding-bottom: 0.7em;'>
                 <form class="mobile"  action="compare" method="get">
                     <div class="col-sm-5 col-sm-offset-1">
@@ -477,7 +502,7 @@ form {
                     {% endfor %}
                     </div>
                     <div class="col-sm-5" style="margin-left: 3em;">
-                        <h3 style='color: white;font-family: sans-serif; font-size: 1em'>Or Enter Your Own:</h3>
+                        <h3 style='color: rgb(68, 68, 68);font-family: monospace; font-size: 1em'>Or Enter Your Own:</h3>
                         <input type="text" id="comp_data" name="comp_data">
                         <input type="hidden" id="query" name="query" value="0">
                         <input type="submit" onclick="clearBtn();" class="btnn" style="color: white;margin-top:0.5em;">
@@ -488,12 +513,12 @@ form {
         </div>
         <div class="row" style="margin-top:3.33em;">
       <div class="col-sm-3" id="block_type1" style="margin-top:0.5em" >
-
+        <h1 style='color: rgb(68, 68, 68);font-family: monospace; font-size: 1.5em;margin-bottom: 10px;'><b>Categorical Segmentation</b></h1>
         <canvas id="data_representation1" width="250%" height="200%">
 
         </canvas></div>
       <div class="col-sm-3" id="block_type1" style="margin-top:0.5em" >
-<h1 style='color:white; font-size: 1.5em; margin: 0'><b>Popularity Meter</b></h1>
+<h1 style='color: rgb(68, 68, 68);font-family: monospace; font-size: 1.5em;margin: 0;'><b>Popularity Meter</b></h1>
 <div id="power-gauge"style="padding-top:1em;"></div>
 
     </div>
@@ -572,14 +597,16 @@ form {
         title: {
             display: true,
             position: "top",
-            text: "Categorical Segmentation",
-            fontSize: 35,
-            fontColor: "#ffffff"
+            text: "based on flags",
+            fontSize: 20,
+            fontStyle: "Monospace",
+            fontColor: "rgb(68, 68, 68)",
+            
         },
         legend: {
             display: true,
             labels: {
-                fontColor: 'rgb(255, 255, 255)',
+                fontColor: 'black',
                 fontSize:15
             }
         }
@@ -614,20 +641,20 @@ form {
             position: "top",
             text: "Popularity",
             fontSize: 18,
-            fontColor: "#ffffff"
+            fontColor: "rgb(68, 68, 68)"
         },
         legend: {
             display: true,
             labels: {
-                fontColor: 'rgb(255, 255, 255)'
+                fontColor: 'rgb(68, 68, 68)'
             }
         },
         elements: {
           center: {
           text: Math.round(json_data['avg_pos']*100) + '%',
-          color: '#ffffff', //Default black
+          color: 'rgb(68, 68, 68)', //Default black
           fontStyle: 'Helvetica', //Default Arial
-          sidePadding: 30 //Default 20 (as a percentage)
+          sidePadding: 20 //Default 20 (as a percentage)
         }
       }
     };
@@ -918,10 +945,10 @@ var gauge = function(container, configuration) {
 <script>
 function onDocumentReady() {
   var powerGauge = gauge('#power-gauge', {
-    size: 300,
-    clipWidth: 300,
-    clipHeight: 300,
-    ringWidth: 60,
+    size: 260,
+    clipWidth: 250,
+    clipHeight: 295,
+    ringWidth: 50,
     maxValue: 10,
     transitionMs: 4000,
   });
