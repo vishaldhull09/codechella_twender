@@ -3,7 +3,7 @@ import tweepy
 from datetime import datetime
 from datetime import timedelta
 
-from tweeter2 import search
+from analysis import search
 from similar_names import get_names
 
 app = Flask(__name__)
